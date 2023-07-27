@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Interface\Weather;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OpenMeteoWeatherService implements Weather
 {
@@ -16,14 +16,14 @@ class OpenMeteoWeatherService implements Weather
 
     public function get(string $name = '', string $country = '')
     {
-        if (!$name || !$country) {
-            abort(422, 'location is required');
+        if (! $name || ! $country) {
+            return null;
         }
 
         $locationDetail = $this->getGeoLocation($name, $country);
 
-        if (!$locationDetail) {
-            abort(422, 'location is required');
+        if (! $locationDetail) {
+            return null;
         }
 
         try {
@@ -45,7 +45,7 @@ class OpenMeteoWeatherService implements Weather
                 return $result;
             }
         } catch (\Throwable $th) {
-            dd($th);
+            Log::error($th->getMessage());
         }
     }
 
@@ -54,10 +54,9 @@ class OpenMeteoWeatherService implements Weather
         try {
             $response = Http::retry(3)
                 ->withQueryParameters([
-                    'name' => $name
+                    'name' => $name,
                 ])
                 ->get($this->geoUrl);
-
 
             if ($response->failed()) {
                 return null;
@@ -75,7 +74,7 @@ class OpenMeteoWeatherService implements Weather
                 return $location;
             }
         } catch (\Throwable $th) {
-            dd($th);
+            Log::error($th->getMessage());
         }
     }
 }

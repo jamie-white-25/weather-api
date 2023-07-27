@@ -9,21 +9,21 @@ use Illuminate\Http\Request;
 class WeatherController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Get weather information
      */
-    public function __invoke(Request $request, Weather $weather)
+    public function __invoke(Request $request, Weather $weather): WeatherResource
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255'],
             'country' => ['required', 'string', 'max:255'],
         ]);
 
         $results = $weather->get(
-            name: $validated['name'],
+            name: $validated['location'],
             country: $validated['country']
         );
 
-        if (!$results) {
+        if (! $results) {
             abort(404, 'The Country could not be determined');
         }
 

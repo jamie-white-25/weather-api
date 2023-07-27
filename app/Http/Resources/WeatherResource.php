@@ -16,6 +16,7 @@ class WeatherResource extends JsonResource
     {
         return [
             'temperature' => $this->temperature,
+            'windspeed' => $this->windspeed,
         ];
     }
 }

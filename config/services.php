@@ -36,6 +36,6 @@ return [
         'url' => env('WEATHER_API_URL'),
         'key' => env('WEATHER_API_URL'),
         'geo' => env('WEATHER_API_GEO_URL'),
-    ]
+    ],
 
 ];

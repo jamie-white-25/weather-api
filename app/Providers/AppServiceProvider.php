@@ -22,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-
         $this->app->scoped(Weather::class, function () {
             return new OpenMeteoWeatherService(
                 weatherUrl: config('services.weather.url'),

@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\WeatherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +17,12 @@ use App\Http\Controllers\WeatherController;
 |
 */
 
-Route::post('weather', WeatherController::class);
-
-Route::post('login', [LoginController::class, 'login']);
+Route::post('login', [LoginController::class, 'authenticate'])
+    ->middleware('guest');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('weather', WeatherController::class);
+    Route::post('logout', [LogoutController::class, 'logout']);
 });
 
 Route::middleware('auth:sanctum')
